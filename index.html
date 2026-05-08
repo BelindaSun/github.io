@@ -281,7 +281,7 @@
     if (!cnAudio && CN_MUSIC_URL !== 'https://example.com/your-audio-file.mp3') {
       cnAudio = new Audio(CN_MUSIC_URL);
       cnAudio.loop = true;
-      cnAudio.volume = 0.4;
+      cnAudio.volume = 0.2;
       cnAudio.onerror = () => {
         console.warn('背景音乐加载失败，请检查链接');
         cnPlaying = false;
