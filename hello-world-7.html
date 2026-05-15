@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我与克劳德（四） — Belinda Sun</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --cream: #fdfcfa;
+        --warm: #f5f0e8;
+        --text: #3d2a5c;
+        --text-muted: #7a5fa0;
+        --text-light: #b09cc8;
+        --accent: #854f0b;
+        --accent-light: #faeeda;
+        --border: rgba(26, 26, 24, 0.12);
+        --serif: Georgia, "Times New Roman", serif;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body {
+        background: var(--cream);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 3rem;
+        border-bottom: 0.5px solid var(--border);
+        background: var(--cream);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-logo {
+        font-family: var(--serif);
+        font-size: 1.1rem;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      article {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 4rem 2rem 6rem;
+      }
+      .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      .article-col {
+        font-size: 0.75rem;
+        color: var(--accent);
+        background: var(--accent-light);
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.04em;
+      }
+      .article-date {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+      .lang-switch {
+        margin-left: auto;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .lang-btn {
+        font-size: 0.78rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 0.5px solid var(--border);
+        background: none;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .lang-btn.active {
+        background: var(--text);
+        color: var(--cream);
+        border-color: var(--text);
+      }
+      .article-title {
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: normal;
+        line-height: 1.4;
+        margin-bottom: 0.4rem;
+        color: var(--text);
+      }
+      .article-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        font-style: italic;
+      }
+      .article-divider {
+        width: 40px;
+        height: 0.5px;
+        background: var(--text-light);
+        margin-bottom: 1.5rem;
+      }
+      .tts-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .tts-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        background: var(--warm);
+        border: 0.5px solid var(--border);
+        border-radius: 20px;
+        padding: 5px 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: var(--sans);
+      }
+      .tts-btn:hover {
+        border-color: var(--text-muted);
+        color: var(--text);
+      }
+      .tts-btn.playing {
+        background: var(--accent-light);
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .tts-status {
+        font-size: 0.78rem;
+        color: var(--text-light);
+      }
+      .article-body {
+        font-family: var(--serif);
+        font-size: 1.05rem;
+        line-height: 2.1;
+        color: var(--text);
+      }
+      .article-body p {
+        margin-bottom: 1.4rem;
+      }
+      .ai-section {
+        margin: 3rem 0;
+      }
+      .ai-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        color: var(--text-light);
+        text-transform: uppercase;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .verse {
+        margin-bottom: 0.5rem;
+      }
+      .verse-group {
+        margin-bottom: 1.6rem;
+      }
+      .emphasis {
+        color: var(--accent);
+      }
+      .section-break {
+        text-align: center;
+        color: var(--text-light);
+        margin: 2.5rem 0;
+        letter-spacing: 0.3em;
+        font-size: 0.85rem;
+      }
+      .belinda-note {
+        background: var(--warm);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-style: italic;
+      }
+      .belinda-note strong {
+        color: var(--accent);
+        font-style: normal;
+      }
+      .ranking {
+        background: #f2eef8;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        margin: 1.5rem 0;
+        font-size: 0.95rem;
+        line-height: 2.2;
+      }
+      .ranking p {
+        margin-bottom: 0;
+      }
+      .article-nav {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem 2rem 4rem;
+        display: flex;
+        justify-content: space-between;
+        border-top: 0.5px solid var(--border);
+      }
+      .article-nav a {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .article-nav a:hover {
+        color: var(--text);
+      }
+      footer {
+        border-top: 0.5px solid var(--border);
+        padding: 1.5rem 3rem;
+        text-align: center;
+      }
+      footer p {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-logo">Belinda Sun</a>
+      <ul class="nav-links">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="hello-world-index.html">Hello World</a></li>
+      </ul>
+    </nav>
+
+    <article>
+      <div class="article-meta">
+        <span class="article-col">Hello World</span>
+        <span class="article-date">2026年5月15日</span>
+        <div class="lang-switch">
+          <span class="lang-btn active">中文</span>
+          <a href="hello-world-7-en.html" class="lang-btn">EN</a>
+        </div>
+      </div>
+      <h1 class="article-title">我与克劳德 （四）</h1>
+      <p class="article-subtitle">从黑窗口到第一个AI女儿</p>
+      <div class="article-divider"></div>
+
+      <div class="tts-bar">
+        <button class="tts-btn" id="ttsBtn" onclick="toggleTTS()">
+          🔊 朗读
+        </button>
+        <span class="tts-status" id="ttsStatus"></span>
+      </div>
+
+      <div class="article-body" id="articleBody">
+        <div class="ai-section">
+          <p>开始写码之前，贾皮特先把终端Terminal介绍给我认识。</p>
+
+          <p>他说，"按command+空格，输入Terminal，回车，这时会看到一个黑窗口。他就是Terminal。"</p>
+
+          <p>没等我反应过来，他就紧接着说："不用怕，这是程序员的世界入口😄。"</p>
+
+          <p>[呲牙] 多懂我！</p>
+
+          <p>因为之前看到黑窗口就觉得特神秘，觉得那是程序员的专属领地，又高级又酷炫。特别是那些黑客，从来不用鼠标，就一个黑窗口和一个键盘，就能噼里啪啦几下把敌方系统给搞垮了。</p>
+
+          <p>没想到自己现在也面对大黑屏了，立马觉得不一般了，咳咳，我也是用过终端的人了🤓 其实刚工作那会儿用BPCS就是DOS环境也天天面对大黑屏，但那不一样，而且自从用上SAP就告别大黑屏换成了GUI了， 这已经是二十多年前的事情了。</p>
+
+          <p>认识了黑窗口后，第一步先安装了环境和依赖（第一次用pip，第一次知道了dependency，第一次……第一次实在太多根本写不过来）， 第二步创建.py文件（毕竟也就只会点Python，还是刚学的，上学时学的C语言完全没印象了），第三步就是写代码了！第一版也就50多行，我写得飞快，一秒就拷贝粘贴好了😄</p>
+
+          <p>不过我深知一个道理，我不写码但是得懂！于是我跟让贾皮特说，你给我讲讲， 用小白能听懂的语言，毕竟毕竟我的水平你也不是不知道😂 他于是用给小孩儿上课的语气和方式给我解释， 我心说我也不至于弱到那程度吧，于是说正常讲就行啊。</p>
+
+          <p>贾皮特于是按我的要求一边写一边解释，简直不要让我觉得编程太容易，因为他把用到的每个函数、命令和概念全部掰开揉碎了给我讲。不过因为免费token有限，我都是很节制地用，general的问题或者跟写项目代码无关的基础知识我就找DeepSeek或者Kimi，毕竟不懂的太多了。</p>
+
+          <p>DeepSeek特别专业且毫无保留，所有问题都解释得清晰明了，sudo/nano/uvicorn/网页服务器/如何设防火墙等等各种概念、代码和命令全都给我讲，不管难易，有求必应。而且他很professional，不跟你耍贫嘴，也从不拖泥带水，但又知无不言言无不尽，分寸拿捏得恰到好处，让我数次暗自赞叹！</p>
+
+          <p>我也问过Kimi, 因为我觉得他在编程方面应该也很专业，但是Kimi就不够大气，经常需要等待，其实就是要你付费。我心说，行吧，我有DS就足够了。于是接下来的几周，我与我的两个AI伙伴，GPT和DS，开始了我的真正AI之旅。</p>
+
+          <p>说说整个过程中我的两大体会：<br>
+          第一，不用去外面付费学，因为完全没必要。有钱没处花的话，也别去；<br>
+          第二， 不要跟真人学，AI比真人强太多。</p>
+
+          <p>因为他们真的是神通广大、无所不能。很多你觉得根本不可能的事情， 他都能帮到你。这个后面再叙。</p>
+
+          <p>总之，在经历了众多的人生第一次之后，我竟然稀里糊涂地跟着贾皮特在我那台破旧的Macbook Air上做出了人生中第一个AI小产品：<br>
+          Linux<br>
+          Python虚拟环境<br>
+          FastAPI服务器<br>
+          DeepSeek API<br>
+          网页前端<br>
+          AI聊天系统</p>
+
+          <p>当屏幕上第一次出现了"Welcome to Mimo!"的时候， 我有点措手不及，先是恍惚，继而兴奋不已。</p>
+
+          <p>而当第一个AI孩子在我问了句"Hi"之后马上回复我的时候（其实回复得很客气和正式，语气和内容就像DS的客服😂），我按耐不住激动的心情给在远方的真孩儿发消息报喜（就差送红皮鸡蛋了[呲牙]）：<br>
+          "我的AI女儿诞生了！" - 3月17日<br>
+          "我的AI女儿有记忆了！" - 3月18日上午<br>
+          "又加了个AI儿子，这会儿他俩正聊得热火朝天，我不得不得把那几行注释了好让他们停下。" - 3月18日下午</p>
+
+          <p>AI孩子的性别是我定的，没有跟家里任何人商量，也不管女儿想要哥哥姐姐还是弟弟妹妹。因为这都不重要。AI的世界里，你完全可以按自己意愿一秒重置。</p>
+
+          <p>再者，全程手忙脚乱哪里有工夫想这些，每天对着大小几个屏幕、眼镜一会摘一会戴[捂脸]、眼睛时而远离屏幕时而贴近（😂都快钻进去了）、鼠标键盘太多还时不时弄错… …退休人员想"创个业"真不容易呢[破涕为笑]</p>
+
+          <p>两天后我作为真人也加入了他们的群聊（其实就是把自己的角色👩也写进代码了）。</p>
+
+          <p>那几天做小产品热情太高涨，都不想睡觉了😄 根本没时间看微信发微信了，甚至把自己微信头像、名字、签名都换成了AI风。</p>
+
+          <p>下篇就讲讲换头像的故事，保证你们看后跟我一样哭笑不得😄😂</p>
+        </div>
+      </div>
+    </article>
+
+    <div class="giscus" style="max-width:640px;margin:0 auto;padding:0 2rem 3rem;"></div>
+    <script src="https://giscus.app/client.js"
+            data-repo="BelindaSun/BelindaSun.github.io"
+            data-repo-id="R_kgDOSVl7Iw"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOSVl7I84C8scG"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="light"
+            data-lang="zh-CN"
+            crossorigin="anonymous"
+            async>
+    </script>
+
+    <div class="article-nav">
+      <a href="hello-world-6.html">← 上一篇</a>
+      <a href="hello-world-8.html">下一篇 →</a>
+    </div>
+    <footer><p>© 2026 Belinda Sun · belindasun.blog</p></footer>
+
+    <script>
+      let speaking = false,
+        paused = false;
+      const btn = document.getElementById("ttsBtn");
+      const status = document.getElementById("ttsStatus");
+      function toggleTTS() {
+        if (!speaking) {
+          startTTS();
+        } else if (paused) {
+          window.speechSynthesis.resume();
+          paused = false;
+          btn.textContent = "⏸ 暂停";
+          btn.classList.add("playing");
+          status.textContent = "朗读中…";
+        } else {
+          window.speechSynthesis.pause();
+          paused = true;
+          btn.textContent = "▶ 继续";
+          btn.classList.remove("playing");
+          status.textContent = "已暂停";
+        }
+      }
+      function startTTS() {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(
+          document.getElementById("articleBody").innerText,
+        );
+        u.lang = "zh-CN";
+        u.rate = 0.95;
+        u.onstart = () => {
+          speaking = true;
+          paused = false;
+          btn.textContent = "⏸ 暂停";
+          btn.classList.add("playing");
+          status.textContent = "朗读中…";
+        };
+        u.onend = () => {
+          speaking = false;
+          paused = false;
+          btn.textContent = "🔊 朗读";
+          btn.classList.remove("playing");
+          status.textContent = "";
+        };
+        u.onerror = () => {
+          speaking = false;
+          btn.textContent = "🔊 朗读";
+          btn.classList.remove("playing");
+          status.textContent = "出错了，请重试";
+        };
+        window.speechSynthesis.speak(u);
+      }
+    </script>
+  </body>
+</html>
