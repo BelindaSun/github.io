@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>健康伴侣 · 中青年/中老年 + 经济/高端 双模AI方案</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --blue: #185FA5; --blue-light: #E6F1FB;
+    --coral: #D85A30; --coral-light: #FAECE7;
+    --gray: #5F5E5A; --gray-light: #F1EFE8; --gray-dark: #2C2C2A;
+    --text: #1a1a18; --text-muted: #5F5E5A; --text-hint: #888780;
+    --bg: #f8f7f4; --bg-card: #fff; --border: #d3d1c7;
+    --radius: 10px; --radius-lg: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 8px rgba(0,0,0,0.04);
+  }
+  body {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+    font-size: 15px; line-height: 1.6;
+  }
+  .app-header {
+    background: linear-gradient(135deg, #085041 0%, #1D9E75 60%, #5DCAA5 100%);
+    color: white; padding: 2rem 1rem 1.5rem; text-align: center;
+  }
+  .app-header h1 { font-size: 28px; font-weight: 600; letter-spacing: 2px; margin-bottom: 6px; }
+  .app-header p { font-size: 14px; opacity: 0.85; }
+  .container { max-width: 780px; margin: 0 auto; padding: 0 12px 60px; }
+  .api-section {
+    background: var(--bg-card); border-radius: var(--radius-lg); border: 1.5px solid var(--amber);
+    padding: 16px 18px; margin: 16px 0; box-shadow: var(--shadow);
+  }
+  .mode-switch { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .mode-buttons { display: flex; gap: 12px; background: var(--gray-light); padding: 4px; border-radius: 40px; }
+  .mode-btn { padding: 6px 18px; border-radius: 30px; font-size: 13px; cursor: pointer; background: transparent; border: none; font-weight: 500; transition: 0.1s; }
+  .mode-btn.active { background: var(--green); color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .demo-note { font-size: 12px; color: var(--green-dark); background: var(--green-light); padding: 6px 10px; border-radius: 20px; display: inline-block; }
+  .api-row { display: flex; gap: 8px; margin-top: 8px; }
+  .api-row input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; background: var(--bg); }
+  .api-row button { padding: 9px 16px; background: var(--green); color: white; border: none; border-radius: var(--radius); cursor: pointer; }
+  .api-row button:hover { background: var(--green-dark); }
+  .api-hint { font-size: 12px; color: var(--text-hint); margin-top: 6px; }
+  .key-saved { display: inline-flex; align-items: center; gap: 4px; background: var(--green-light); color: var(--green-dark); font-size: 12px; padding: 3px 10px; border-radius: 99px; margin-left: 10px; }
+  .tabs-wrap { overflow-x: auto; padding: 14px 0 0; }
+  .tabs { display: flex; gap: 6px; padding-bottom: 0; min-width: max-content; }
+  .tab { padding: 9px 16px; border-radius: var(--radius) var(--radius) 0 0; background: var(--bg-card); border: 1px solid var(--border); border-bottom: none; font-size: 14px; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+  .tab.active { background: white; color: var(--green-dark); font-weight: 500; border-color: var(--green); border-bottom-color: white; }
+  .panels { background: white; border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg); border: 1px solid var(--border); padding: 20px; box-shadow: var(--shadow); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .section-label { font-size: 13px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 10px; }
+  .section-label:first-child { margin-top: 0; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:480px){ .form-grid { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 13px; color: var(--text-muted); }
+  .form-group input, .form-group select { padding: 9px 11px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; background: var(--bg); transition: 0.15s; }
+  .tip { background: var(--green-light); border-left: 3px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0; padding: 10px 14px; font-size: 13px; color: var(--green-dark); margin-bottom: 16px; line-height: 1.7; }
+  .module-list { display: grid; gap: 8px; margin-top: 14px; }
+  .module-card { display: flex; align-items: center; gap: 12px; padding: 13px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: 0.15s; }
+  .module-card:hover { background: var(--green-light); border-color: var(--green); }
+  .module-icon { width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .module-card .info .title { font-size: 15px; font-weight: 500; }
+  .module-card .info .desc { font-size: 12px; color: var(--text-hint); margin-top: 2px; }
+  .arrow { margin-left: auto; color: var(--text-hint); }
+  .btn-gen { width: 100%; padding: 13px; margin-top: 16px; background: var(--green); color: white; border: none; border-radius: var(--radius-lg); font-size: 16px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.15s; }
+  .btn-gen:disabled { background: var(--border); cursor: not-allowed; }
+  .result-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; min-height: 60px; display: none; margin-top: 16px; }
+  .result-box.visible { display: block; }
+  .loading { display: flex; align-items: center; gap: 10px; color: var(--text-muted); }
+  .spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .result-content { font-size: 14px; line-height: 1.9; white-space: pre-wrap; }
+  .result-error { color: var(--coral); }
+  .daily-preview { display: flex; gap: 10px; margin-bottom: 14px; justify-content: space-between; }
+  .daily-card { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 6px; text-align: center; }
+  .daily-card i { font-size: 28px; display: block; margin-bottom: 6px; }
+  .daily-card .dlabel { font-size: 12px; color: var(--text-hint); }
+  hr { margin: 16px 0; border: none; border-top: 1px solid var(--gray-light); }
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: var(--text-hint); }
+  .diet-style-select, .age-group-select { background: var(--blue-light); border-radius: var(--radius); padding: 8px 12px; margin-top: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .diet-style-select label, .age-group-select label { font-weight: 500; color: var(--blue); }
+  .diet-style-select select, .age-group-select select { padding: 6px 12px; border-radius: 30px; background: white; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>🌿 健康伴侣 · 全龄双模版</h1>
+  <p>中青年 / 中老年 | 经济实惠 / 高品质营养 | AI个性化健康方案</p>
+</div>
+
+<div class="container">
+  <div class="api-section">
+    <div class="mode-switch">
+      <span style="font-weight:500;">⚙️ 工作模式</span>
+      <div class="mode-buttons" id="mode-buttons">
+        <button class="mode-btn" data-mode="demo">✨ 演示模式 (无需Key)</button>
+        <button class="mode-btn active" data-mode="real">🔑 真实模式 (需DeepSeek Key)</button>
+      </div>
+    </div>
+    <div id="demo-hint" class="demo-note" style="display:none;">💡 演示模式下所有方案基于您填写的个人信息动态生成示例内容，不消耗API额度</div>
+    
+    <div id="api-key-area" style="margin-top:10px;">
+      <label>🔑 DeepSeek API Key <span class="key-saved" id="key-saved-badge" style="display:none"><i class="ti ti-check"></i> 已保存</span></label>
+      <div class="api-row">
+        <input type="password" id="api-key-input" placeholder="sk-..." autocomplete="off" />
+        <button onclick="saveKey()">保存</button>
+      </div>
+      <div class="api-hint">👉 真实模式需要DeepSeek Key。新用户免费赠送500万tokens：<a href="https://platform.deepseek.com/api_keys" target="_blank">platform.deepseek.com</a>。演示模式无需Key，可体验全部功能。</div>
+    </div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('profile')"><i class="ti ti-user"></i> 我的信息</div>
+      <div class="tab" onclick="switchTab('nutrition')"><i class="ti ti-soup"></i> 营养饮食</div>
+      <div class="tab" onclick="switchTab('exercise')"><i class="ti ti-walk"></i> 居家锻炼</div>
+      <div class="tab" onclick="switchTab('fasting')"><i class="ti ti-clock"></i> 作息断食</div>
+      <div class="tab" onclick="switchTab('shopping')"><i class="ti ti-shopping-cart"></i> 购物清单</div>
+      <div class="tab" onclick="switchTab('daily')"><i class="ti ti-sun"></i> 每日动力</div>
+      <div class="tab" onclick="switchTab('lifestyle')"><i class="ti ti-heart"></i> 综合方案</div>
+    </div>
+  </div>
+
+  <div class="panels">
+    <!-- 我的信息 -->
+    <div class="panel active" id="panel-profile">
+      <div class="tip">填写真实信息，所有方案自动适配。年龄、体重、活动量越准，方案越贴合您的身体。</div>
+      <div class="section-label">基本信息</div>
+      <div class="form-grid">
+        <div class="form-group"><label>年龄</label><input type="number" id="age" placeholder="例：35" value="35"></div>
+        <div class="form-group"><label>性别</label><select id="gender"><option value="男">男</option><option value="女" selected>女</option></select></div>
+        <div class="form-group"><label>身高(cm)</label><input type="number" id="height" placeholder="例：170" value="170"></div>
+        <div class="form-group"><label>体重(kg)</label><input type="number" id="weight" placeholder="例：70" value="70"></div>
+      </div>
+      <div class="age-group-select">
+        <label>📅 年龄段：</label>
+        <select id="age_group">
+          <option value="young">🧑 中青年（25-44岁）</option>
+          <option value="senior">👴 中老年（45岁及以上）</option>
+        </select>
+        <span style="font-size:12px;color:var(--text-muted);">→ 影响锻炼强度、断食建议、营养侧重点</span>
+      </div>
+      <div class="section-label">运动与生活习惯</div>
+      <div class="form-grid">
+        <div class="form-group"><label>健身水平</label><select id="fitness_level"><option value="初级（很少运动）" selected>初级（很少运动）</option><option value="中级（偶尔运动）">中级（偶尔运动）</option><option value="高级（经常运动）">高级（经常运动）</option></select></div>
+        <div class="form-group"><label>每天可运动时间</label><select id="exercise_time"><option value="20分钟">20分钟</option><option value="30分钟" selected>30分钟</option><option value="45分钟">45分钟</option><option value="60分钟">60分钟</option></select></div>
+        <div class="form-group"><label>日常活动量</label><select id="activity"><option value="低（久坐为主）">低（久坐为主）</option><option value="中（每天走动）" selected>中（每天走动）</option><option value="高（体力劳动）">高（体力劳动）</option></select></div>
+        <div class="form-group"><label>最难克服的方面</label><select id="hardest"><option value="食欲控制（管不住嘴）">食欲控制（管不住嘴）</option><option value="坚持动力（三分钟热度）" selected>坚持动力（三分钟热度）</option><option value="时间安排（没时间）">时间安排（没时间）</option><option value="关节疼痛（运动受限）">关节疼痛（运动受限）</option></select></div>
+      </div>
+      <div class="section-label">作息与预算</div>
+      <div class="form-grid">
+        <div class="form-group"><label>晚上睡觉时间</label><input type="time" id="sleep_time" value="23:00"></div>
+        <div class="form-group"><label>早上起床时间</label><input type="time" id="wake_time" value="07:00"></div>
+        <div class="form-group form-full"><label>每周饮食预算</label><select id="budget"><option value="300元以内">300元以内</option><option value="300-600元" selected>300-600元</option><option value="600-1000元">600-1000元</option><option value="不限预算">不限预算</option></select></div>
+      </div>
+      <div class="diet-style-select">
+        <label>🍽️ 饮食方案风格：</label>
+        <select id="diet_style">
+          <option value="economy">💰 经济实惠型（平价食材，性价比优先）</option>
+          <option value="premium">🌟 高品质健康型（三文鱼、藜麦、牛油果等优质食材）</option>
+        </select>
+        <span style="font-size:12px;color:var(--text-muted);">→ 影响「营养饮食」和「购物清单」模块</span>
+      </div>
+      <hr>
+      <div class="section-label">点击下方模块，立刻生成方案</div>
+      <div class="module-list">
+        <div class="module-card" onclick="switchTab('nutrition')"><div class="module-icon" style="background:#E1F5EE;">🥗</div><div class="info"><div class="title">营养饮食方案</div><div class="desc">根据年龄、风格生成7天菜单</div></div><i class="ti ti-chevron-right arrow"></i></div>
+        <div class="module-card" onclick="switchTab('exercise')"><div class="module-icon" style="background:#E6F1FB;">🧘</div><div class="info"><div class="title">居家锻炼计划</div><div class="desc">中青年高效燃脂 / 中老年关节友好</div></div><i class="ti ti-chevron-right arrow"></i></div>
+        <div class="module-card" onclick="switchTab('fasting')"><div class="module-icon" style="background:#FAEEDA;">⏰</div><div class="info"><div class="title">作息断食指南</div><div class="desc">中青年可尝试16:8，中老年温和节律</div></div><i class="ti ti-chevron-right arrow"></i></div>
+        <div class="module-card" onclick="switchTab('shopping')"><div class="module-icon" style="background:#FAECE7;">🛒</div><div class="info"><div class="title">每周购物清单</div><div class="desc">经济或高端，分类清晰</div></div><i class="ti ti-chevron-right arrow"></i></div>
+        <div class="module-card" onclick="switchTab('daily')"><div class="module-icon" style="background:#EAF3DE;">☀️</div><div class="info"><div class="title">每日动力推送</div><div class="desc">贴士+名言+小任务</div></div><i class="ti ti-chevron-right arrow"></i></div>
+        <div class="module-card" onclick="switchTab('lifestyle')"><div class="module-icon" style="background:#FBEAF0;">❤️</div><div class="info"><div class="title">综合生活方式方案</div><div class="desc">长期不反弹，养成习惯</div></div><i class="ti ti-chevron-right arrow"></i></div>
+      </div>
+    </div>
+
+    <!-- 各功能面板 -->
+    <div class="panel" id="panel-nutrition"><div class="tip">基于您的年龄组、体重、预算以及饮食风格，生成7天饮食计划。中青年侧重代谢支持，中老年侧重易消化和骨健康。</div><button class="btn-gen" onclick="generate('nutrition', this)"><i class="ti ti-sparkles"></i> 生成我的7天饮食方案</button><div class="result-wrap"><div class="result-box" id="result-nutrition"></div></div></div>
+    <div class="panel" id="panel-exercise"><div class="tip">根据您的年龄段和健身水平定制的居家锻炼计划。中青年可包含HIIT、自重训练；中老年以低冲击、关节保护为主。</div><button class="btn-gen" onclick="generate('exercise', this)"><i class="ti ti-sparkles"></i> 生成我的锻炼计划</button><div class="result-wrap"><div class="result-box" id="result-exercise"></div></div></div>
+    <div class="panel" id="panel-fasting"><div class="tip">根据年龄段和作息时间推荐进食节律。中青年可尝试16:8间歇性断食；中老年推荐14:10或12:12温和模式。</div><button class="btn-gen" onclick="generate('fasting', this)"><i class="ti ti-sparkles"></i> 生成我的作息与断食方案</button><div class="result-wrap"><div class="result-box" id="result-fasting"></div></div></div>
+    <div class="panel" id="panel-shopping"><div class="tip">按您的预算、饮食风格生成购物清单。经济型便宜易得，高端型包含优质蛋白和超级食物。</div><button class="btn-gen" onclick="generate('shopping', this)"><i class="ti ti-sparkles"></i> 生成我的购物清单</button><div class="result-wrap"><div class="result-box" id="result-shopping"></div></div></div>
+    <div class="panel" id="panel-daily"><div class="daily-preview"><div class="daily-card"><i class="ti ti-bulb" style="color:#BA7517"></i><div class="dlabel">减脂贴士</div></div><div class="daily-card"><i class="ti ti-quote" style="color:#1D9E75"></i><div class="dlabel">励志一句</div></div><div class="daily-card"><i class="ti ti-checkbox" style="color:#185FA5"></i><div class="dlabel">今日小任务</div></div></div><div class="tip">每天一次，获取一份适合您年龄段的动力内容。</div><button class="btn-gen" onclick="generate('daily', this)"><i class="ti ti-refresh"></i> 获取今日动力</button><div class="result-wrap"><div class="result-box" id="result-daily"></div></div></div>
+    <div class="panel" id="panel-lifestyle"><div class="tip">整合营养、运动、心态和日常习惯，生成一份“不反弹”的终身健康方案。</div><button class="btn-gen" onclick="generate('lifestyle', this)"><i class="ti ti-sparkles"></i> 生成我的综合生活方案</button><div class="result-wrap"><div class="result-box" id="result-lifestyle"></div></div></div>
+  </div>
+  <div class="footer">🌿 健康伴侣 · 由 DeepSeek 驱动 · 演示模式基于模板生成，真实模式调用AI · 如有慢性病请遵医嘱</div>
+</div>
+
+<script>
+  // ---------- 模式与Key管理 ----------
+  let currentMode = 'real';   // 'real' or 'demo'
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      if(btn.dataset.mode === mode) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+    const apiKeyArea = document.getElementById('api-key-area');
+    const demoHint = document.getElementById('demo-hint');
+    if(mode === 'demo') {
+      apiKeyArea.style.opacity = '0.5';
+      apiKeyArea.style.pointerEvents = 'none';
+      demoHint.style.display = 'inline-block';
+    } else {
+      apiKeyArea.style.opacity = '1';
+      apiKeyArea.style.pointerEvents = 'auto';
+      demoHint.style.display = 'none';
+    }
+    localStorage.setItem('hb_mode', mode);
+  }
+  function saveKey() {
+    const val = document.getElementById('api-key-input').value.trim();
+    if(!val.startsWith('sk-')) { alert('DeepSeek API Key 一般以 sk- 开头，请检查'); return; }
+    localStorage.setItem('ds_api_key', val);
+    document.getElementById('key-saved-badge').style.display = 'inline-flex';
+    alert('✅ Key已保存，现在可以切换到真实模式生成个性化方案');
+  }
+  function getKey() { return localStorage.getItem('ds_api_key') || ''; }
+  
+  (function init() {
+    const savedMode = localStorage.getItem('hb_mode');
+    if(savedMode === 'demo') setMode('demo');
+    else setMode('real');
+    const savedKey = localStorage.getItem('ds_api_key');
+    if(savedKey) { document.getElementById('api-key-input').value = savedKey; document.getElementById('key-saved-badge').style.display = 'inline-flex'; }
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+  })();
+
+  function getProfile() {
+    return {
+      age: document.getElementById('age').value || '35',
+      age_group: document.getElementById('age_group').value, // 'young' or 'senior'
+      gender: document.getElementById('gender').value,
+      height: document.getElementById('height').value || '170',
+      weight: document.getElementById('weight').value || '70',
+      fitness_level: document.getElementById('fitness_level').value,
+      exercise_time: document.getElementById('exercise_time').value,
+      sleep_time: document.getElementById('sleep_time').value,
+      wake_time: document.getElementById('wake_time').value,
+      budget: document.getElementById('budget').value,
+      activity: document.getElementById('activity').value,
+      hardest: document.getElementById('hardest').value,
+      diet_style: document.getElementById('diet_style').value   // 'economy' or 'premium'
+    };
+  }
+
+  // 提示词模板（支持年龄段 + 饮食风格）
+  const prompts = {
+    nutrition: p => {
+      const isSenior = p.age_group === 'senior';
+      const isPremium = p.diet_style === 'premium';
+      const ageDesc = isSenior ? '中老年（45岁以上）' : '中青年（25-44岁）';
+      const focusSenior = isSenior ? '注重钙质、维生素D、易消化蛋白、低盐低油，预防肌少症和骨质疏松。' : '注重代谢支持、优质蛋白、适量碳水，帮助减脂增肌，提升精力。';
+      if(!isPremium) {
+        return `你是专业的营养师。用户为${ageDesc}，${p.age}岁${p.gender}，身高${p.height}cm，体重${p.weight}kg，每周饮食预算${p.budget}。请制定**7天经济型饮食计划**，要求：
+- ${focusSenior}
+- 食材必须是普通菜市场/超市能买到的平价食物（如鸡蛋、豆腐、鸡胸、猪肉、白菜、萝卜、海带等），避免昂贵或难买食材。
+- 每天写清楚早餐、午餐、晚餐，可加简单加餐。
+- 最后附一份按类别的**一周采购清单**。
+请用中文输出，语言温暖朴实。`;
+      } else {
+        return `你是高端营养专家。用户为${ageDesc}，${p.age}岁${p.gender}，身高${p.height}cm，体重${p.weight}kg，预算充裕。请制定**7天高品质健康饮食计划**，要求：
+- ${focusSenior}
+- 允许使用优质食材：三文鱼、鳕鱼、牛油果、藜麦、奇亚籽、蓝莓、羽衣甘蓝、希腊酸奶、草饲牛肉等。
+- 每天写清楚早餐、午餐、晚餐，可加精致加餐。
+- 强调抗氧化、抗炎食材，烹饪方式健康（蒸、烤、低温慢煮）。
+- 最后附一份**高端购物清单**（含推荐品牌或产地可选）。
+请用中文输出，专业且易执行。`;
+      }
+    },
+    exercise: p => {
+      const isSenior = p.age_group === 'senior';
+      if(isSenior) {
+        return `你是中老年健身教练。用户：${p.age}岁${p.gender}，健身水平${p.fitness_level}，每天可运动${p.exercise_time}，难点是${p.hardest}。设计**30天无器材居家锻炼计划**，要求：
+- 绝对安全：保护膝关节和腰椎，不做跳跃、深蹲过低、仰卧起坐等高风险动作
+- 每阶段有递进逻辑（第一周适应，第二周加量）
+- 每个动作说明：名称、次数/时长、技术要点、注意事项
+- 每次包含5分钟热身+主体训练+5分钟拉伸
+- 输出时按周说明，第一周详细列出每天动作，后几周给模板示例
+语言清晰，适合中老年理解。`;
+      } else {
+        return `你是高效的健身教练，专为中青年设计居家训练。用户：${p.age}岁${p.gender}，健身水平${p.fitness_level}，每天可运动${p.exercise_time}，难点是${p.hardest}。设计**30天无器材或简易器材（可用水瓶）的锻炼计划**，要求：
+- 目标是减脂、增肌、提升体能，可包含HIIT、自重训练（深蹲、俯卧撑、平板支撑、波比跳简化版等），但要考虑关节安全，避免过度跳跃。
+- 按周递进，第一周适应，第四周强度较高。
+- 每个动作说明次数/时长和正确技巧。
+- 每次包含5分钟热身+主体训练+5分钟拉伸。
+- 输出时第一周详细，后续周给出变化模板。
+语言简洁有激励性。`;
+      }
+    },
+    fasting: p => {
+      const isSenior = p.age_group === 'senior';
+      if(isSenior) {
+        return `你是生活方式与生物钟专家。用户${p.age}岁（中老年），睡觉${p.sleep_time}，起床${p.wake_time}。请定制：
+1. 推荐的进食节律（推荐14:10或12:12温和模式，避免严格断食）
+2. 基于作息的时间表（几点吃早餐、午餐、晚餐）
+3. 进食窗口内的三餐搭配建议
+4. 每日饮水计划
+5. 改善睡眠的3个晚间习惯
+6. 早晨提升精力的3个小习惯
+注意：中老年不建议长时间断食，强调规律进食和水分补充。`;
+      } else {
+        return `你是生物钟与代谢优化专家。用户${p.age}岁（中青年），睡觉${p.sleep_time}，起床${p.wake_time}。请定制：
+1. 推荐的间歇性断食模式（如16:8或18:6，说明理由）
+2. 基于作息的时间表（进食窗口开始结束时间）
+3. 进食窗口内的营养分配建议
+4. 断食期间可以喝什么（黑咖啡、茶等）
+5. 每日饮水计划
+6. 改善睡眠和提高晨间精力的习惯
+注意：适合健康中青年，若有低血糖或压力大需调整。`;
+      }
+    },
+    shopping: p => {
+      const isSenior = p.age_group === 'senior';
+      const isPremium = p.diet_style === 'premium';
+      const ageHint = isSenior ? '中老年易消化、高钙、高蛋白' : '中青年高能量、高蛋白、恢复快';
+      if(!isPremium) {
+        return `你是购物专家+营养师。用户为${isSenior ? '中老年' : '中青年'}，每周预算${p.budget}，目标健康减脂。制定**一周经济型购物清单**，按类别：
+- 蛋白质来源（平价：鸡蛋、豆腐、鸡胸、猪肉、带鱼等）
+- 主食碳水（大米、小米、燕麦、红薯等）
+- 健康脂肪（食用油、坚果等）
+- 蔬菜水果（应季、平价）
+- 健康零食（无糖酸奶、原味坚果）
+每类给出2-4种具体食材和大概价格，最后附3条省钱技巧。格式用列表。`;
+      } else {
+        return `你是高端营养采购顾问。用户为${isSenior ? '中老年' : '中青年'}，预算充裕。制定**一周高品质购物清单**，按类别：
+- 优质蛋白（三文鱼、鳕鱼、草饲牛肉、有机鸡胸、即食虾仁）
+- 超级主食（藜麦、有机糙米、鹰嘴豆、奇亚籽）
+- 健康脂肪（牛油果、特级初榨橄榄油、杏仁、核桃）
+- 蔬菜水果（羽衣甘蓝、西兰花、蓝莓、树莓）
+- 健康零食（希腊酸奶、黑巧克力、椰片）
+每类列出2-4种推荐食材或品牌，附营养价值亮点。最后给出3条高端食材保存与烹饪技巧。`;
+      }
+    },
+    daily: p => {
+      const isSenior = p.age_group === 'senior';
+      if(isSenior) {
+        return `你是中老年健康生活教练。用户${p.age}岁，体重${p.weight}kg，最难的是${p.hardest}。请输出今天的内容：
+【今日减脂贴士】一条针对中老年的实用建议（2-3句）
+【今日一句话】一句励志短句（20字以内，现实不夸张）
+【今日小任务】一个今天就能完成的简单行动（5-15分钟，安全）
+风格：温暖、有力、不鸡汤。`;
+      } else {
+        return `你是充满活力的健康生活教练，面向中青年。用户${p.age}岁，体重${p.weight}kg，最难的是${p.hardest}。请输出今天的内容：
+【今日减脂贴士】一条针对上班族/中青年的高效建议（可能涉及代谢、压力、睡眠）
+【今日一句话】一句简短有冲击力的励志语（不鸡汤，直接）
+【今日小任务】一个今天能完成的小挑战（可涉及微习惯、HIIT动作或饮食调整）
+风格：简洁、有行动力、略带幽默。`;
+      }
+    },
+    lifestyle: p => {
+      const isSenior = p.age_group === 'senior';
+      if(isSenior) {
+        return `你是可持续减脂与中老年健康专家。用户：${p.age}岁${p.gender}，身高${p.height}，体重${p.weight}kg，日常活动量${p.activity}，困难${p.hardest}。请制定**综合生活方式方案**，包含：
+1. 营养原则（3-4条简单规则）
+2. 日常活动融入技巧（如何把运动拆进生活）
+3. 心态管理（应对平台期和动力下降）
+4. 每日5个关键习惯清单
+5. 中老年减肥增肌的3大常见误区
+6. 每月复盘建议
+强调长期习惯，不反弹。`;
+      } else {
+        return `你是中青年健康优化专家。用户：${p.age}岁${p.gender}，身高${p.height}，体重${p.weight}kg，工作活动量${p.activity}，困难${p.hardest}。请制定**高效生活方式方案**，包含：
+1. 营养策略（适应工作节奏，如外食、食堂如何选择）
+2. 碎片化运动技巧（办公室、家中无器械）
+3. 压力与睡眠管理（皮质醇影响减脂）
+4. 每日5个非 negotiable 习惯
+5. 中青年减脂增肌3大误区（过度节食、忽略睡眠、只做有氧）
+6. 每周进度评估方法
+风格：直击痛点，可执行性强。`;
+      }
+    }
+  };
+
+  // 演示模式动态生成（支持年龄段 + 饮食风格）
+  function demoGenerate(type, p) {
+    const isSenior = p.age_group === 'senior';
+    const isPremium = p.diet_style === 'premium';
+    if(type === 'nutrition') {
+      if(isSenior) {
+        if(!isPremium) {
+          return `【中老年 · 经济型】7天营养方案示例（${p.age}岁，${p.weight}kg）
+
+**第1天**  
+早餐：水煮蛋1个 + 小米粥1碗 + 凉拌黄瓜  
+午餐：杂粮饭半碗 + 豆腐炒虾皮 + 清炒小白菜  
+晚餐：南瓜小米粥 + 蒸鱼肉1块 + 烫菠菜  
+加餐：苹果半个  
+
+**第2天**  
+早餐：无糖豆浆1杯 + 全麦馒头1个  
+午餐：米饭（糙米+白米）+ 蘑菇炒鸡胸肉 + 蒜蓉西蓝花  
+晚餐：西红柿鸡蛋面（少油） + 凉拌海带丝  
+
+...（共7天，侧重软烂易消化）
+
+✅ 采购清单（经济型，预算${p.budget}）  
+- 蛋白质：鸡蛋20个、鸡胸肉1kg、豆腐2块、巴沙鱼柳500g  
+- 蔬菜：西兰花、大白菜、菠菜、黄瓜、番茄  
+- 主食：小米、大米、红薯、全麦馒头  
+- 水果：苹果、香蕉  
+- 其他：无糖酸奶、核桃仁
+
+> 演示模式示例，真实模式将更个性化。`;
+        } else {
+          return `【中老年 · 高端品质型】7天营养方案示例（${p.age}岁，${p.weight}kg）
+
+**第1天**  
+早餐：牛油果半个+全麦吐司+水波蛋1个，配蓝莓50g  
+午餐：烤三文鱼排150g + 藜麦沙拉（藜麦+羽衣甘蓝+樱桃番茄）淋橄榄油  
+晚餐：番茄鲜虾意面（全麦意面）+ 芝麻菜沙拉  
+加餐：希腊酸奶+奇亚籽
+
+**第2天**  
+早餐：希腊酸奶碗（蓝莓、核桃、奇亚籽）  
+午餐：香煎鳕鱼 + 烤芦笋 + 糙米饭  
+晚餐：鸡胸肉牛油果藜麦碗 + 蒸西兰花  
+
+...（共7天，每日变换海鲜和超级食材）
+
+✅ 高端采购清单（预算充裕）  
+- 蛋白质：三文鱼排、鳕鱼、草饲牛肉、有机鸡蛋  
+- 主食：有机藜麦、鹰嘴豆、奇亚籽  
+- 蔬果：牛油果、羽衣甘蓝、蓝莓、树莓  
+- 脂肪：特级初榨橄榄油、杏仁、核桃  
+
+> 演示模式高端版示例，真实模式将更丰富。`;
+        }
+      } else {
+        // 中青年
+        if(!isPremium) {
+          return `【中青年 · 经济型】7天高效减脂增肌饮食示例（${p.age}岁，${p.weight}kg）
+
+**第1天**  
+早餐：2个水煮蛋 + 燕麦粥 + 黑咖啡  
+午餐：糙米饭150g + 卤鸡腿1个 + 炒西兰花  
+晚餐：蒸红薯1个 + 虾仁炒蛋 + 凉拌黄瓜  
+加餐：无糖酸奶1杯
+
+**第2天**  
+早餐：全麦三明治（鸡蛋+生菜）+ 美式咖啡  
+午餐：杂粮饭 + 煎豆腐 + 清炒油麦菜  
+晚餐：番茄龙利鱼汤 + 玉米半根  
+
+...（共7天，保证蛋白质每公斤1.2-1.5g）
+
+✅ 采购清单（经济型）  
+- 蛋白质：鸡蛋30个、鸡腿1kg、豆腐3块、龙利鱼柳500g  
+- 主食：糙米、燕麦、红薯、玉米  
+- 蔬菜：西兰花、油麦菜、黄瓜、番茄  
+- 水果：香蕉、苹果  
+- 其他：黑咖啡、无糖酸奶
+
+> 中青年代谢快，可适当增加蛋白质。`;
+        } else {
+          return `【中青年 · 高端品质型】7天健康饮食示例（${p.age}岁，${p.weight}kg）
+
+**第1天**  
+早餐：牛油果鸡蛋开放三明治 + 蓝莓奶昔（希腊酸奶+蓝莓+奇亚籽）  
+午餐：香煎三文鱼配藜麦饭 + 烤芦笋  
+晚餐：草饲牛肉炒西兰花 + 紫薯半个  
+加餐：蛋白粉奶昔
+
+**第2天**  
+早餐：奇亚籽布丁（杏仁奶+奇亚籽+树莓）  
+午餐：烤鸡胸肉 + 鹰嘴豆泥 + 混合生菜沙拉  
+晚餐：蒜蓉大虾 + 糙米意大利面  
+
+...（共7天，优化脂肪酸和抗氧化物）
+
+✅ 高端采购清单  
+- 蛋白质：三文鱼、草饲牛肉、大虾、有机鸡胸  
+- 主食：藜麦、奇亚籽、鹰嘴豆  
+- 蔬果：牛油果、蓝莓、树莓、芦笋  
+- 脂肪：特级初榨橄榄油、杏仁  
+
+> 中青年高端版，兼顾美味与身材管理。`;
+        }
+      }
+    }
+    if(type === 'exercise') {
+      if(isSenior) {
+        return `【中老年 · 30天居家锻炼计划（低冲击）】  
+**第一周（适应期）**  
+周一：靠墙静蹲20秒×3组 + 坐姿抬腿每侧12次×3组 + 原地踏步2分钟×3组  
+周二：墙壁俯卧撑10次×3组 + 站姿后抬腿每侧12次×3组 + 侧向走5步来回×3趟  
+周三：平衡训练（单腿扶墙站立每侧30秒×3组）+ 毛巾划船12次×3组  
+周四：休息 / 慢走20分钟  
+周五：重复周一内容  
+周六：重复周二内容  
+周日：散步30分钟 + 全身拉伸  
+
+**第二周~第四周**：逐渐增加组数至4组，静蹲时长增至30秒，加入跪姿平板支撑（10秒起）。`;
+      } else {
+        return `【中青年 · 30天居家锻炼计划（燃脂增肌）】  
+**第一周（基础建立）**  
+周一：深蹲12次×3组 + 俯卧撑（膝盖版）10次×3组 + 平板支撑20秒×3组 + 开合跳30秒×3组  
+周二：弓步蹲每侧10次×3组 + 臀桥15次×3组 + 登山跑30秒×3组 + 休息1分钟  
+周三：休息或低强度拉伸  
+周四：重复周一  
+周五：波比跳简化版8次×3组 + 高抬腿40秒×3组 + 侧平板每侧15秒×3组  
+周六：户外快走30分钟或跳绳  
+周日：全身拉伸  
+
+**第二周~第四周**：增加组数至4组，平板支撑增至40秒，加入俯身划船（用水瓶）。  
+⚠️ 根据体能调整，避免关节疼痛。`;
+      }
+    }
+    if(type === 'fasting') {
+      if(isSenior) {
+        return `【中老年 · 温和进食节律】  
+根据作息（睡${p.sleep_time}，起${p.wake_time}）：  
+1. 推荐14:10模式（晚餐到次日早餐间隔14小时）  
+2. 时间表：08:30早餐，12:30午餐，18:30晚餐  
+3. 饮水：全天1.6升  
+4. 助眠：21:30泡脚，22:00关电子设备  
+5. 早晨：见光、伸懒腰、温水`;
+      } else {
+        return `【中青年 · 间歇性断食16:8】  
+根据作息（睡${p.sleep_time}，起${p.wake_time}）：  
+1. 推荐16:8模式：进食窗口12:00-20:00  
+2. 断食期间可喝水、黑咖啡、无糖茶  
+3. 第一餐：12:00高蛋白午餐，第二餐：18:00丰盛晚餐  
+4. 饮水：全天2-2.5升  
+5. 晚间习惯：23:00前放下手机，晨间：晒太阳+轻度活动`;
+      }
+    }
+    if(type === 'shopping') {
+      if(isSenior) {
+        if(!isPremium) return `🛒 中老年经济型购物清单（预算${p.budget}）\n【蛋白质】鸡蛋、鸡胸、豆腐、带鱼\n【主食】小米、红薯、全麦馒头\n【蔬菜】大白菜、菠菜、胡萝卜\n【水果】苹果、香蕉\n【脂肪】核桃、食用油\n总价约150-200元。`;
+        else return `🛒 中老年高端购物清单\n三文鱼、鳕鱼、牛油果、藜麦、蓝莓、希腊酸奶、橄榄油。预算约800-1000元。`;
+      } else {
+        if(!isPremium) return `🛒 中青年经济型购物清单（预算${p.budget}）\n【蛋白质】鸡蛋、鸡腿、豆腐、龙利鱼\n【主食】糙米、燕麦、玉米\n【蔬菜】西兰花、生菜、番茄\n【水果】香蕉、蓝莓（少量）\n【脂肪】花生酱、混合坚果\n总价约200-300元。`;
+        else return `🛒 中青年高端购物清单\n三文鱼、草饲牛肉、大虾、藜麦、奇亚籽、牛油果、蓝莓、羽衣甘蓝、希腊酸奶、黑巧克力。预算约1000-1200元。`;
+      }
+    }
+    if(type === 'daily') {
+      if(isSenior) {
+        return `✨ 今日动力（中老年版）  
+【贴士】饭后散步15分钟，帮助控制血糖。  
+【一句话】每天进步一点点，健康陪伴到永远。  
+【小任务】今天做10分钟拉伸，放松肩颈和腰背。`;
+      } else {
+        return `⚡ 今日动力（中青年版）  
+【贴士】睡够7小时比少吃一顿饭更燃脂。  
+【一句话】你流的每一滴汗，都是对抗衰老的子弹。  
+【小任务】今晚做3组平板支撑（每组20秒），挑战自己！`;
+      }
+    }
+    if(type === 'lifestyle') {
+      if(isSenior) {
+        return `【中老年综合方案】\n1. 营养：每餐一掌蛋白质，主食粗细各半，蔬菜多多。\n2. 活动：看电视时踮脚尖，每天累计6000步。\n3. 心态：接受缓慢进步，记录小成就。\n4. 每日习惯：晨起温水、午间小憩、傍晚散步、晚餐早吃、睡前泡脚。\n5. 误区：老人也要吃肉、不要只做有氧、别盲目断食。`;
+      } else {
+        return `【中青年高效方案】\n1. 营养：蛋白质每公斤1.6g，碳水围绕训练时间。\n2. 活动：办公室每小时站起2分钟，午休爬楼梯。\n3. 心态：80%时间自律，20%时间放松。\n4. 每日习惯：早起空腹水、午间快走10分钟、戒掉含糖饮料、晚餐后不进食、23点前睡。\n5. 误区：不吃主食瘦得快但反弹猛、只做有氧掉肌肉、迷信补剂。`;
+      }
+    }
+    return "演示模式内容生成失败，请重试。";
+  }
+
+  async function callDeepSeek(promptText, apiKey) {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [{ role: 'user', content: promptText }],
+        max_tokens: 1800,
+        temperature: 0.7
+      })
+    });
+    if(!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    return data.choices[0].message.content;
+  }
+
+  async function generate(type, btn) {
+    const p = getProfile();
+    const mode = currentMode;
+    const resultBox = document.getElementById(`result-${type}`);
+    resultBox.className = 'result-box visible';
+    resultBox.innerHTML = '<div class="loading"><div class="spinner"></div> 正在生成方案，请稍后…</div>';
+    btn.disabled = true;
+
+    try {
+      if(mode === 'demo') {
+        await new Promise(r => setTimeout(r, 400));
+        const demoContent = demoGenerate(type, p);
+        resultBox.innerHTML = `<div class="result-content">${escapeHtml(demoContent)}<br><br><span style="font-size:12px;color:var(--text-hint);">🔍 当前为演示模式，内容基于模板生成。切换到真实模式并填写DeepSeek Key可获得AI个性化方案。</span></div>`;
+      } else {
+        const apiKey = getKey();
+        if(!apiKey) throw new Error('请先在顶部保存 DeepSeek API Key，或切换到演示模式');
+        const promptText = prompts[type](p);
+        const aiContent = await callDeepSeek(promptText, apiKey);
+        resultBox.innerHTML = `<div class="result-content">${escapeHtml(aiContent)}</div>`;
+      }
+    } catch(err) {
+      let errMsg = err.message;
+      if(errMsg.includes('Failed to fetch') || errMsg.includes('NetworkError')) errMsg = '网络错误，请检查是否能访问 api.deepseek.com（可能需要代理或切换网络）';
+      resultBox.innerHTML = `<div class="result-error">❌ 生成失败：${escapeHtml(errMsg)}<br><br>👉 您可以切换「演示模式」继续体验全部功能。</div>`;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function switchTab(name) {
+    const tabs = ['profile','nutrition','exercise','fasting','shopping','daily','lifestyle'];
+    tabs.forEach(t => {
+      const panel = document.getElementById(`panel-${t}`);
+      if(panel) panel.classList.toggle('active', t === name);
+    });
+    document.querySelectorAll('.tab').forEach((tab, idx) => {
+      tab.classList.toggle('active', tabs[idx] === name);
+    });
+  }
+</script>
+</body>
+</html>
