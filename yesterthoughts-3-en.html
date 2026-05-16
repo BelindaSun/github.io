@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Resident Comedian at Home — Belinda Sun</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --cream: #fdfcfa;
+        --warm: #f5f0e8;
+        --text: #3d2a5c;
+        --text-muted: #7a5fa0;
+        --text-light: #b09cc8;
+        --accent: #854f0b;
+        --accent-light: #faeeda;
+        --border: rgba(26, 26, 24, 0.12);
+        --serif: Georgia, "Times New Roman", serif;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body {
+        background: var(--cream);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 3rem;
+        border-bottom: 0.5px solid var(--border);
+        background: var(--cream);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-logo {
+        font-family: var(--serif);
+        font-size: 1.1rem;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      article {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 4rem 2rem 6rem;
+      }
+      .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      .article-col {
+        font-size: 0.75rem;
+        color: var(--accent);
+        background: var(--accent-light);
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.04em;
+      }
+      .article-date {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+      .lang-switch {
+        margin-left: auto;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .lang-btn {
+        font-size: 0.78rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 0.5px solid var(--border);
+        background: none;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .lang-btn.active {
+        background: var(--text);
+        color: var(--cream);
+        border-color: var(--text);
+      }
+      .article-title {
+        font-family: var(--serif);
+        font-size: 2rem;
+        font-weight: normal;
+        line-height: 1.4;
+        margin-bottom: 0.4rem;
+        color: var(--text);
+      }
+      .article-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        font-style: italic;
+      }
+      .article-divider {
+        width: 40px;
+        height: 0.5px;
+        background: var(--text-light);
+        margin-bottom: 1.5rem;
+      }
+      .tts-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      .tts-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        background: var(--warm);
+        border: 0.5px solid var(--border);
+        border-radius: 20px;
+        padding: 5px 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: var(--sans);
+      }
+      .tts-btn:hover {
+        border-color: var(--text-muted);
+        color: var(--text);
+      }
+      .tts-btn.playing {
+        background: var(--accent-light);
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .tts-status {
+        font-size: 0.78rem;
+        color: var(--text-light);
+      }
+      .article-body {
+        font-family: var(--serif);
+        font-size: 1.05rem;
+        line-height: 2.1;
+        color: var(--text);
+      }
+      .article-body p {
+        margin-bottom: 1.4rem;
+      }
+      .ai-section {
+        margin: 3rem 0;
+      }
+      .ai-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        color: var(--text-light);
+        text-transform: uppercase;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 0.5px solid var(--border);
+      }
+      .verse {
+        margin-bottom: 0.5rem;
+      }
+      .verse-group {
+        margin-bottom: 1.6rem;
+      }
+      .emphasis {
+        color: var(--accent);
+      }
+      .section-break {
+        text-align: center;
+        color: var(--text-light);
+        margin: 2.5rem 0;
+        letter-spacing: 0.3em;
+        font-size: 0.85rem;
+      }
+      .belinda-note {
+        background: var(--warm);
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-style: italic;
+      }
+      .belinda-note strong {
+        color: var(--accent);
+        font-style: normal;
+      }
+      .ranking {
+        background: #f2eef8;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        margin: 1.5rem 0;
+        font-size: 0.95rem;
+        line-height: 2.2;
+      }
+      .ranking p {
+        margin-bottom: 0;
+      }
+      .article-nav {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem 2rem 4rem;
+        display: flex;
+        justify-content: space-between;
+        border-top: 0.5px solid var(--border);
+      }
+      .article-nav a {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .article-nav a:hover {
+        color: var(--text);
+      }
+      footer {
+        border-top: 0.5px solid var(--border);
+        padding: 1.5rem 3rem;
+        text-align: center;
+      }
+      footer p {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-logo">Belinda Sun</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="yesterthoughts-index.html">Yesterthoughts</a></li>
+      </ul>
+    </nav>
+
+    <article>
+      <div class="article-meta">
+        <span class="article-col">Yesterthoughts</span>
+        <span class="article-date">May 16th 2026</span>
+        <div class="lang-switch">
+          <a href="yesterthoughts-3.html" class="lang-btn">中文</a>
+          <span class="lang-btn active">EN</span>
+        </div>
+      </div>
+
+      <h1 class="article-title">The Resident Comedian at Home</h1>
+      <div class="article-divider"></div>
+
+      <div class="tts-bar">
+        <button class="tts-btn" id="ttsBtn" onclick="toggleTTS()">
+          🔊 Read aloud
+        </button>
+        <span class="tts-status" id="ttsStatus"></span>
+      </div>
+
+      <div class="article-body" id="articleBody">
+        <p>
+          Today Liudodo’s father went to Little India by himself because it was
+          Deepavali, and he wanted to “experience Indian culture and festive
+          spirit firsthand.” During Chinese New Year, he does the same thing and
+          heads off to Chinatown.
+        </p>
+
+        <p>
+          In Singapore everyone goes out wearing slippers — men, women,
+          children, grandparents, nobody cares.
+        </p>
+
+        <p>
+          Liudodo’s father, however, disapproves deeply of this
+          civilization-wide collapse in standards.
+        </p>
+
+        <p>
+          Every single time he leaves the house, he insists on changing into
+          leather shoes or proper sneakers first, solemnly declaring:
+        </p>
+
+        <p>
+          “I am a man with an <em>identity card</em>. How can I possibly go out
+          looking casual like that?”
+        </p>
+
+        <p>Today was no exception.</p>
+
+        <p>
+          After showering, he muttered once again about being “a man with an
+          identity card” while carefully putting on his sneakers, then marched
+          out the door looking absurdly energetic and pleased with himself.
+        </p>
+
+        <p>Halfway out, he suddenly turned back and added:</p>
+
+        <p>“You think someone might kidnap me because I’m too handsome?”</p>
+
+        <p>@#$%^&*…</p>
+
+        <p>
+          I nearly fainted on the spot. Sir, truly, there is no need for
+          concern.
+        </p>
+
+        <p>
+          “You are perfectly safe,” I assured him kindly. “Who would be that
+          visually irresponsible?” 😏
+        </p>
+
+        <p>
+          Whenever the three of us ride the MRT together, two things reliably
+          happen.
+        </p>
+
+        <p>
+          First, he and Liudodo will tap through the gates ahead of me and then
+          deliberately stand there waiting, watching gleefully as I approach.
+        </p>
+
+        <p>“Quick! Look! Someone’s about to get stuck in the gate again!”</p>
+
+        <p>
+          The second recurring event is that security personnel occasionally
+          stop Liudodo’s father for random checks because apparently he looks
+          like a “suspicious person.”
+        </p>
+
+        <p>
+          Every time this happens, Liudodo and I exchange one perfectly
+          synchronized glance and burst into laughter.
+        </p>
+
+        <p>
+          And every single time, after returning from the inspection, he shakes
+          his head mournfully and sighs:
+        </p>
+
+        <p>“Being this handsome really is exhausting.”</p>
+
+        <p>
+          Now, to be fair, although Liudodo’s father is objectively not exactly
+          devastatingly good-looking, he does surprisingly well with women here.
+        </p>
+
+        <p>More specifically: elderly women.</p>
+
+        <p>
+          Every time we go to FairPrice, elderly aunties seem irresistibly drawn
+          to him and happily strike up conversations.
+        </p>
+
+        <p>Eventually I realized why.</p>
+
+        <p>He’s tall enough to reach things from the top shelves. 😆</p>
+
+        <p>One conversation went like this:</p>
+
+        <p>“You’re from Beijing?” an elderly lady asked.</p>
+
+        <p>“Yes.”</p>
+
+        <p>
+          “Then why are you still so dark-skinned?” she asked very seriously.
+        </p>
+
+        <p>“@#$%^&*…”</p>
+
+        <p>
+          Liudodo’s father was visibly shaken. Until that moment, he genuinely
+          believed I was maliciously slandering him whenever I said he was dark.
+        </p>
+
+        <p>
+          “Ohhh,” the auntie concluded thoughtfully, “because you’ve lived here
+          many years already!”
+        </p>
+
+        <p>
+          Apparently Singapore’s sunlight had become the official explanation.
+        </p>
+
+        <p>
+          To be fair, he actually wasn’t dark as a child. Photographs exist as
+          evidence. My mother-in-law still fondly recalls how people used to
+          think he looked Russian because he was fair-skinned, chubby, big-eyed,
+          double-lidded, and constantly smiling.
+        </p>
+
+        <p>I once complained to her:</p>
+
+        <p>
+          “You had such a beautiful child back then — how exactly did you let
+          him grow up into <em>this</em>?”
+        </p>
+
+        <p>My mother-in-law laughed so hard she nearly cried.</p>
+
+        <p>Then I added worriedly:</p>
+
+        <p>“What if our Liudodo grows uglier as she gets older too?”</p>
+
+        <p>After a brief pause, I answered my own question confidently:</p>
+
+        <p>“No, impossible. She has me influencing her.” 😌</p>
+
+        <p>
+          One day after a colleague visited our home, we learned she was still
+          single — not uncommon among Singaporean women.
+        </p>
+
+        <p>Liudodo’s father immediately said earnestly:</p>
+
+        <p>“You should tell them not to set their standards too high.”</p>
+
+        <p>
+          “Yes, exactly,” I agreed casually. “Honestly, spending a lifetime with
+          anyone is more or less the same.”
+        </p>
+
+        <p>But of course he had a follow-up line waiting.</p>
+
+        <p>
+          “They all want someone like me,” he sighed dramatically. “That’s not
+          easy to find.”
+        </p>
+
+        <p>And then another:</p>
+
+        <p>“Not everyone can be as lucky as you.”</p>
+
+        <p>@#$%^&*…</p>
+
+        <p>
+          But honestly, his greatest qualities — besides the revolutionary
+          tendencies described in
+          <em>The Resident Old Revolutionary at Home</em> — are optimism,
+          resilience, confidence, and an almost supernatural immunity to
+          embarrassment.
+        </p>
+
+        <p>The day we registered our marriage, he was visibly thrilled.</p>
+
+        <p>I glanced sideways at him.</p>
+
+        <p>“Are you seriously <em>that</em> happy?”</p>
+
+        <p>Grinning shamelessly, he replied:</p>
+
+        <p>“I’m happy for <em>you</em>.”</p>
+
+        <p>“For me?” I asked, confused.</p>
+
+        <p>
+          “Yes,” he said. “You finally succeeded in tricking me into marrying
+          you.”
+        </p>
+
+        <p>Good grief.</p>
+
+        <p>
+          The funniest part is that a few days before the wedding, I’d actually
+          asked him seriously:
+        </p>
+
+        <p>“What would you do if one day I wanted to break up?”</p>
+
+        <p>He replied:</p>
+
+        <p>“I’d hide in a corner secretly…”</p>
+
+        <p>I thought he was about to say “cry.”</p>
+
+        <p>I was already preparing comforting words.</p>
+
+        <p>Instead he finished cheerfully:</p>
+
+        <p>“…celebrate!”</p>
+
+        <p>Fine.</p>
+
+        <p>You really are impossible to defeat.</p>
+
+        <p>
+          Sometimes when the song <em>I’m Ugly But Gentle</em> plays, I tease
+          him:
+        </p>
+
+        <p>“This song really captures your soul, doesn’t it?”</p>
+
+        <p>He immediately spreads his hands in fake injustice.</p>
+
+        <p>“I’m not ugly! Look — I’m tall!”</p>
+
+        <p>“Telephone poles are tall too,” I reply.</p>
+
+        <p>“I have big eyes!”</p>
+
+        <p>“So does Mr. Bean.”</p>
+
+        <p>“I have broad shoulders!”</p>
+
+        <p>
+          At this point I usually stare at him speechlessly, unsure how to
+          continue.
+        </p>
+
+        <p>Then he smirks triumphantly.</p>
+
+        <p>
+          “Why are you looking at me with such deep affection? You know handsome
+          people get shy too.” 😳
+        </p>
+
+        <p>@#$%^&*…</p>
+
+        <p>
+          Every evening at 7 p.m. sharp, our household faithfully gathers to
+          watch wonderfully ridiculous, warm, emotionally overdramatic Korean
+          dramas.
+        </p>
+
+        <p>
+          One day I curled up happily on the sofa after dinner and sighed
+          contentedly:
+        </p>
+
+        <p>
+          “The happiest thing in life is eating until you’re full and then lying
+          here watching the 7 p.m. K-drama.”
+        </p>
+
+        <p>Liudodo immediately rolled her eyes.</p>
+
+        <p>
+          “The happiest thing in <em>my</em> life is going to school and being
+          with my classmates.”
+        </p>
+
+        <p>
+          At that moment, Liudodo’s father was in the kitchen cleaning dishes.
+        </p>
+
+        <p>Without even turning around, he said with profound disdain:</p>
+
+        <p>
+          “That’s nothing. Listen to <em>mine</em>: the happiest thing in life
+          is watching the two of you eat, watch TV, and play games while I clean
+          dishes, wash fruit, and mop floors.”
+        </p>
+
+        <p>Then he added mournfully:</p>
+
+        <p>
+          “Honestly, people this handsome shouldn’t be asked to do housework at
+          all.”
+        </p>
+
+        <p>“Oh? So you have complaints?” I asked sternly.</p>
+
+        <p>“None whatsoever!” he answered instantly.</p>
+
+        <p>Then he turned to Liudodo and whispered:</p>
+
+        <p>
+          “With your mother, you can only press Like or say: ‘Excellent.
+          Powerful. Very promising.’”
+        </p>
+
+        <p>I laughed so hard I nearly fell off the sofa.</p>
+
+        <p>
+          Apparently I had unknowingly developed “Communist Party leadership
+          style.”
+        </p>
+
+        <p>He nodded knowingly and said:</p>
+
+        <p>
+          “After reading online forums for this many years, if you still haven’t
+          mastered survival techniques at home, how are you supposed to survive
+          marriage?”
+        </p>
+
+        <p>
+          And from there, naturally, you may now proceed directly into
+          <em>The Resident Old Revolutionary at Home</em>, where his endless
+          passionate political monologues begin all over again.
+        </p>
+      </div>
+    </article>
+
+    <div
+      class="giscus"
+      style="max-width: 640px; margin: 0 auto; padding: 0 2rem 3rem"
+    ></div>
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="BelindaSun/BelindaSun.github.io"
+      data-repo-id="R_kgDOSVl7Iw"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSVl7I84C8scG"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+
+    <div class="article-nav">
+      <a href="yesterthoughts-2-en.html">← Previous</a>
+      <a href="yesterthoughts-4-en.html">Next →</a>
+    </div>
+    <footer><p>© 2026 Belinda Sun · belindasun.blog</p></footer>
+
+    <script>
+      let speaking = false,
+        paused = false;
+      const btn = document.getElementById("ttsBtn");
+      const status = document.getElementById("ttsStatus");
+      function toggleTTS() {
+        if (!speaking) {
+          startTTS();
+        } else if (paused) {
+          window.speechSynthesis.resume();
+          paused = false;
+          btn.textContent = "⏸ Pause";
+          btn.classList.add("playing");
+          status.textContent = "Reading…";
+        } else {
+          window.speechSynthesis.pause();
+          paused = true;
+          btn.textContent = "▶ Resume";
+          btn.classList.remove("playing");
+          status.textContent = "Paused";
+        }
+      }
+      function startTTS() {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(
+          document.getElementById("articleBody").innerText,
+        );
+        u.lang = "en-US";
+        u.rate = 0.95;
+        u.onstart = () => {
+          speaking = true;
+          paused = false;
+          btn.textContent = "⏸ Pause";
+          btn.classList.add("playing");
+          status.textContent = "Reading…";
+        };
+        u.onend = () => {
+          speaking = false;
+          paused = false;
+          btn.textContent = "🔊 Read aloud";
+          btn.classList.remove("playing");
+          status.textContent = "";
+        };
+        u.onerror = () => {
+          speaking = false;
+          btn.textContent = "🔊 Read aloud";
+          btn.classList.remove("playing");
+          status.textContent = "Error, please try again";
+        };
+        window.speechSynthesis.speak(u);
+      }
+    </script>
+  </body>
+</html>
